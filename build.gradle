@@ -1,0 +1,51 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven { url 'https://repo.spring.io/libs-snapshot' }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+sourceCompatibility = '1.8'
+
+repositories {
+	jcenter()
+}
+
+dependencies {
+	implementation( 'org.springframework.boot:spring-boot-starter-data-jpa')
+	implementation('org.springframework.boot:spring-boot-starter-web')
+	implementation('com.h2database:h2')
+	compileOnly('org.projectlombok:lombok')
+	testImplementation ('org.springframework.boot:spring-boot-starter-test')
+	
+	//有了這行
+	//然後把原本的 @Repository 換成 @RepositoryRestResource
+	//就可以直接使用下面的api 不需要在book裡面去敘述 超方便
+	//POST /books
+	//PUT /books/{bookid}
+	//GET /books/{bookid}
+	//DELETE /books/{bookid}
+	//也可以進一步用這個註解開控制是否對外 @RestResource(exported = false)
+	implementation('org.springframework.boot:spring-boot-starter-data-rest')
+	
+	//swagger
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	implementation group: 'io.springfox', name: 'springfox-data-rest', version: '2.9.2'
+    implementation 'org.junit.jupiter:junit-jupiter-engine:5.8.0-M1:test'
+	
+}
+
